@@ -1,10 +1,9 @@
 import matplotlib.pyplot as plt
-import random as r
 
-mensen = r.sample(range(131), 30)
-ids = [x for x in range(len(mensen))]
+mensenLeeftijd = [10, 22, 80, 60, 23, 60, 75, 87, 24, 67, 13, 56, 79, 47]
+ids = [x for x in range(len(mensenLeeftijd))]
 
-plt.bar(ids, mensen)
+plt.bar(ids, mensenLeeftijd)
 
 plt.xlabel("x")
 plt.ylabel("y")
