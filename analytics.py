@@ -1,12 +1,12 @@
 import matplotlib.pyplot as plt
 
-mensenLeeftijd = [10, 22, 80, 60, 23, 60, 75, 87, 24, 67, 13, 56, 79, 47]
-ids = [x for x in range(len(mensenLeeftijd))]
+kilo_afval = [10, 22, 80, 60, 23, 60, 75]
+dag = ["maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag", "zondag"]
 
-plt.bar(ids, mensenLeeftijd)
+plt.bar(dag, kilo_afval)
 
-plt.xlabel("x")
-plt.ylabel("y")
+plt.xlabel("dag")
+plt.ylabel("kilo afval")
 plt.title("placeholder")
 plt.legend()
 plt.show()
