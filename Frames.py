@@ -1,4 +1,5 @@
 import tkinter as gui
+""""
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import style
@@ -7,8 +8,8 @@ from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
-
 import numpy as np
+"""
 
 
 # Empty frame for testing
@@ -22,19 +23,23 @@ class EmptyFrame(gui.Frame):
 # How full & basic data
 # Emptying Data
 
-class ContainerEmptyFrame(gui.Frame):
+class ContainerGraphFrame(gui.Frame):
     def __init__(self, master, controller):
         gui.Frame.__init__(self, master)
-        self.label = gui.Label(self, text='Empty Container').grid()
+        self.label = gui.Label(self, text='Graph').grid()
 
-        # self.trash = {"day": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"], "trash_kilo": [5, 7, 4, 8, 6, 12, 9]}
-        fig = Figure(figsize=(5, 4), dpi=100)
-        t = np.arange(0, 3, .01)
-        fig.add_subplot(111).plot(t, 2 * np.sin(2 * np.pi * t))
+        # self.label_number = gui.Label(self, textvariable=controller.number_var).grid()
+        # self.label_location = gui.Label(self, textvariable=controller.location_var).grid()
 
-        canvas = FigureCanvasTkAgg(fig, master=self)  # A tk.DrawingArea.
-        canvas.draw()
-        canvas.get_tk_widget().grid()
+        # self.trash = {"day": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+        #  "trash_kilo": [5, 7, 4, 8, 6, 12, 9]}
+        # fig = Figure(figsize=(5, 4), dpi=100)
+        # t = np.arange(0, 3, .01)
+        # fig.add_subplot(111).plot(t, 2 * np.sin(2 * np.pi * t))
+
+        # canvas = FigureCanvasTkAgg(fig, master=self)  # A tk.DrawingArea.
+        # canvas.draw()
+        # canvas.get_tk_widget().grid()
         # canvas.get_tk_widget().pack(side=gui.TOP, fill=gui.BOTH, expand=1)
 
         # df = pd.DataFrame(self.trash)
