@@ -30,8 +30,6 @@ class Container:
         self.total_room = 35
         self.location = 'UMC'
 
-    def database(self):
-
 
 
 
