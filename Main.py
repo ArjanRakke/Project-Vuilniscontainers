@@ -16,18 +16,24 @@ class MainApplication(gui.Tk):
         container = gui.Frame(self)
         container.pack(fill='x')
 
+        # The frames contain specific elements, and will be displayed in [container]
+        # Data contains all data from the database
         self.frames = {}
-        # self.data = self.database()
-        # self.current_container = self.data[0]
         self.data = ()
         self.current_container = []
 
+        # Every container has these variables, which are updated based on the [self.current_container]
+        # The current container is the top row in the database by default
         self.ID_var = gui.IntVar()
         self.location_var = gui.StringVar()
         self.room_var = gui.IntVar()
         self.total_room = gui.IntVar()
+        self.update_vars()
 
-        self.update_vars(0)
+        # All container locations in a list, for the drop down menu
+        self.all_containers = []
+        for x in self.data:
+            self.all_containers.append(x[1])
 
         # Initializes frames with [container] as master and [self] as controller
         # All frames are piled up, show_frame puts a specific frame on top
@@ -42,55 +48,56 @@ class MainApplication(gui.Tk):
         button_graph = gui.Button(toolbar, text='Graph', command=lambda: self.show_frame(GraphFrame))
         button_refresh = gui.Button(toolbar, text='Refresh', command=lambda: self.database())
 
-        self.drop_down_default = gui.StringVar(self)
-        self.drop_down_default.set(self.current_container[1])
-        drop_down = gui.OptionMenu(toolbar, self.drop_down_default, self.data[0][1])
+        # self.drop_down_default = gui.StringVar(self)
+        # self.drop_down_default.set(self.current_container[1])
+        # drop_down = gui.OptionMenu(toolbar, self.drop_down_default, *self.all_containers, command=self.update_vars)
 
         button_container_empty.pack(side='left', padx=2, pady=2)
         button_container_data.pack(side='left', padx=2, pady=2)
         button_settings.pack(side='left', padx=2, pady=2)
         button_graph.pack(side='left', padx=2, pady=2)
         button_refresh.pack(side='left', padx=2, pady=2)
-        drop_down.pack(side='right', padx=2, pady=2)
+        # drop_down.pack(side='right', padx=2, pady=2)
 
     # Show specific frame
     def show_frame(self, cont):
         self.frames[cont].tkraise()
 
-    # Pop up messages
-    @staticmethod
-    def message_box(type_message, message):
-        if type_message == 'info':
-            gui.messagebox.showinfo('Info', message)
-        if type_message == 'error':
-            gui.messagebox.showerror('Error', message)
-        if type_message == 'warning':
-            gui.messagebox.showwarning('Warning', message)
-
     # Gets data from database
     @staticmethod
-    def database():
-        db = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            passwd="",
-            database="project_vuilnis"
-        )
-        cmd = db.cursor()
-        cmd.execute("SELECT * FROM containers")
-        result = cmd.fetchall()
-        return result
+    def database(table):
+        try:
+            db = mysql.connector.connect(
+                host="localhost",
+                user="root",
+                passwd="",
+                database="database_vuilophaaldienst"
+            )
+            cmd = db.cursor()
 
-    def update_vars(self, id):
-        self.data = self.database()
-        self.current_container = self.data[id]
+            if table == 'containers':
+                cmd.execute("SELECT * FROM containers")
+            if table == 'omwonende':
+                cmd.execute("SELECT * FROM omwonende")
+            result = cmd.fetchall()
+            return result
+        except:
+            gui.messagebox.showerror("Foutmelding", "Er kon geen verbinding gemaakt worden met de database.")
+
+    def update_vars(self):
+        self.data = self.database('containers')
+        self.current_container = self.data[0]
 
         self.ID_var.set(self.current_container[0])
         self.location_var.set(self.current_container[1])
         self.room_var.set(self.current_container[2])
         self.total_room.set(self.current_container[3])
 
-        print('Current: {}'.format(self.current_container))
+        print('Current container: {}'.format(self.current_container))
+
+    @staticmethod
+    def tester(thing):
+        print(thing)
 
 
 app = MainApplication()

@@ -23,13 +23,45 @@ class ContainerGraphFrame(gui.Frame):
         ax = f.add_subplot(111)
 
         days = ('maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag')
-        values = [20, 35, 30, 36, 27, 30, 25]
+        values = [0, 0, 0, 0, 0, 0, 0]
+        values = self.calculate_values(controller)
 
         ax.bar(days, values)
         ax.set_facecolor('xkcd:white')
         canvas = FigureCanvasTkAgg(f, self)
         canvas.draw()
         canvas.get_tk_widget().grid()
+
+    @staticmethod
+    def calculate_values(cont):
+        print('Totale omwonenden: {}'.format(cont.database('omwonende')))
+        omwonenden = cont.database('omwonende')
+        values = [0, 0, 0, 0, 0, 0, 0]
+        for x in omwonenden:
+            x_days = x[4]
+            y_values = x[3]
+            while len(x_days) > 0:
+                if y_values > 1:
+                    y_values -= 1
+                if x_days[-2:] == 'ma':
+                    values[0] += y_values
+                if x_days[-2:] == 'di':
+                    values[1] += y_values
+                if x_days[-2:] == 'wo':
+                    values[2] += y_values
+                if x_days[-2:] == 'do':
+                    values[3] += y_values
+                if x_days[-2:] == 'vr':
+                    values[4] += y_values
+                if x_days[-2:] == 'za':
+                    values[5] += y_values
+                if x_days[-2:] == 'zo':
+                    values[6] += y_values
+                x_days = x_days[:-2]
+
+        print('ma: {}\ndi: {}\nwo: {}\ndo: {}\nvr: {}\nza: {}\nzo: {}'.format(values[0], values[1], values[2], values[3], values[4], values[5], values[6]))
+        return values
+
 
 
 class ContainerDataFrame(gui.Frame):

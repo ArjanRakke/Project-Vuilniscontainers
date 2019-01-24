@@ -1,4 +1,5 @@
 import mysql.connector
+from win10toast import ToastNotifier
 
 # INPUT
 # How much trash fits in the container
@@ -13,15 +14,22 @@ import mysql.connector
 # Time for emptying (1 or more)
 
 
-def check_room(room, total_room):
-    room_percentage = (room / total_room) * 100
-    if room_percentage > 80:
-        print('vol')
-    else:
-        print('nog ruimte over')
+def check_capacity(location, room, total_room):
+    # Check database for room and total room of every container
+    # Calculate percentage
+    room_percentage = round((room / total_room) * 100)
+    if room_percentage >= 80:
+        ToastNotifier().show_toast('Container bijna vol', '{} container zit {}% vol'.format(location, room_percentage))
+    return room_percentage
 
 
-check_room(25, 30)
+def check_behaviour():
+    # What day is busiest?
+    # How much trash do people throw away?
+    return None
+
+
+check_capacity('UMC', 25, 30)
 
 
 class Container:
