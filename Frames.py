@@ -1,4 +1,9 @@
 import tkinter as gui
+from matplotlib import style
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+style.use('ggplot')
+
 """"
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -18,6 +23,9 @@ class EmptyFrame(gui.Frame):
         gui.Frame.__init__(self, master)
         self.label = gui.Label(self, text='Empty').grid()
 
+        f = Figure(figsize=(10, 5), dpi=100)
+        ax = f.add_subplot(111)
+
 
 # CONTAINER FRAMES
 # How full & basic data
@@ -27,31 +35,6 @@ class ContainerGraphFrame(gui.Frame):
     def __init__(self, master, controller):
         gui.Frame.__init__(self, master)
         self.label = gui.Label(self, text='Graph').grid()
-
-        # self.label_number = gui.Label(self, textvariable=controller.number_var).grid()
-        # self.label_location = gui.Label(self, textvariable=controller.location_var).grid()
-
-        # self.trash = {"day": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
-        #  "trash_kilo": [5, 7, 4, 8, 6, 12, 9]}
-        # fig = Figure(figsize=(5, 4), dpi=100)
-        # t = np.arange(0, 3, .01)
-        # fig.add_subplot(111).plot(t, 2 * np.sin(2 * np.pi * t))
-
-        # canvas = FigureCanvasTkAgg(fig, master=self)  # A tk.DrawingArea.
-        # canvas.draw()
-        # canvas.get_tk_widget().grid()
-        # canvas.get_tk_widget().pack(side=gui.TOP, fill=gui.BOTH, expand=1)
-
-        # df = pd.DataFrame(self.trash)
-        # df.set_index("dag", inplace=True)
-
-        # plt.bar(self.trash["dag"], self.trash["kilos_afval"])
-
-        # plt.xlabel("dag")
-        # plt.ylabel("kilo afval")
-        # plt.title("placeholder")
-        # plt.show()
-        # print(df)
 
 
 class ContainerDataFrame(gui.Frame):
