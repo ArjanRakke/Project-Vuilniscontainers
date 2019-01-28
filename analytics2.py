@@ -4,15 +4,17 @@ from matplotlib import style
 style.use("ggplot")
 
 afval_storting = {"dag": ["maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag", "zondag"],
-                  "kilos_afval": [5, 7, 4, 8, 6, 12, 9]}
+                  "vuilniszakken": [4, 0, 1, 0, 4, 2, 0]}
+
+liters_afval = [x * 60 for x in afval_storting["vuilniszakken"]]
 
 df = pd.DataFrame(afval_storting)
 df.set_index("dag", inplace=True)
 
-plt.bar(afval_storting["dag"], afval_storting["kilos_afval"])
+plt.bar(afval_storting["dag"], liters_afval)
 
 plt.xlabel("dag")
-plt.ylabel("kilo afval")
-plt.title("placeholder")
+plt.ylabel("liter afval")
+plt.title("afval storting in liters")
 plt.show()
 print(df)
