@@ -1,17 +1,69 @@
 import tkinter as gui
 import tkinter.messagebox
-from Frames import EmptyFrame, ContainerDataFrame, ContainerGraphFrame, SettingsFrame, GraphFrame
+from Frames import EmptyFrame, ContainerDataFrame
 import mysql.connector
 
+####################################
+# REMEMBER TO REMOVE UNUSED FRAMES #
+####################################
+
+# f0ffef = groen
 
 class MainApplication(gui.Tk):
     def __init__(self, *args, **kwargs):
         gui.Tk.__init__(self, *args, **kwargs)
+        # Contains all other frames
+        box = gui.Frame(self)
+        box.place(width=800, height=500)
+        box.grid_rowconfigure(0)
+        box.grid_columnconfigure(0)
 
-        # Toolbar
-        toolbar = gui.Frame(self, bd=1, relief='raised')
-        toolbar.pack(side='top', fill='x')
+        box.config(background='#FFF')
+        current_container = gui.StringVar()
 
+        # Each frame is defined in Frames.py, and contains a specific set of controls
+        self.frames = {}
+        for F in (EmptyFrame, ContainerDataFrame):
+            self.frames[F] = F(box, self)
+            self.frames[F].grid(row=0, column=0, sticky='news')
+        self.show_frame(ContainerDataFrame)
+
+    def show_frame(self, controller):
+        self.frames[controller].tkraise()
+
+    def message_box(self, title, message, message_type):
+        if message_type == "info":
+            gui.messagebox.showinfo(title, message)
+        elif message_type == "warning":
+            gui.messagebox.showwarning(title, message)
+        else:
+            gui.messagebox.showerror(title, message)
+
+    def database(self):
+        db = mysql.connector.connect(
+            host='localhost',
+            user='root',
+            passwd='',
+            database='database_vuilophaaldienst'
+        )
+        cmd = db.cursor()
+        cmd.execute('SELECT * FROM containers')
+        result = cmd.fetchall()
+        return result
+
+    def update_vars(self):
+        result = self.database()
+        self.current_container.set
+
+
+    @staticmethod
+    def test(test):
+        print(test)
+
+
+
+
+""""
         # Container contains everything
         container = gui.Frame(self)
         container.pack(fill='x')
@@ -44,16 +96,8 @@ class MainApplication(gui.Tk):
             self.frames[F].grid(row=0, sticky='news')
         self.show_frame(ContainerGraphFrame)
 
-        button_container_empty = gui.Button(toolbar, text='Dagelijkse Vuilnis', command=lambda: self.show_frame(ContainerGraphFrame))
-        button_refresh = gui.Button(toolbar, text='Refresh', command=lambda: self.database())
-
         self.drop_down_default = gui.StringVar(self)
         self.drop_down_default.set(self.current_container[1])
-        drop_down = gui.OptionMenu(toolbar, self.drop_down_default, *self.all_containers, command=self.update_vars)
-
-        button_container_empty.pack(side='left', padx=2, pady=2)
-        button_refresh.pack(side='left', padx=2, pady=2)
-        drop_down.pack(side='right', padx=2, pady=2)
 
     # Show specific frame
     def show_frame(self, cont):
@@ -131,6 +175,7 @@ class MainApplication(gui.Tk):
     def tester(thing):
         print(thing)
 
+"""
 
 app = MainApplication()
 app.mainloop()

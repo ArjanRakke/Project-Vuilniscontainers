@@ -1,8 +1,10 @@
 import tkinter as gui
+import tkinter.messagebox
+import mysql.connector
+import pandas as pd
+import matplotlib.pyplot as plt
 from matplotlib import style
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.figure import Figure
-style.use('ggplot')
+style.use("ggplot")
 
 
 # Empty frame for testing
@@ -19,18 +21,7 @@ class EmptyFrame(gui.Frame):
 class ContainerGraphFrame(gui.Frame):
     def __init__(self, master, controller):
         gui.Frame.__init__(self, master)
-        f = Figure(figsize=(10, 5), dpi=100)
-        ax = f.add_subplot(111)
 
-        days = ('maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag')
-        values = [0, 0, 0, 0, 0, 0, 0]
-        values = self.calculate_values(controller)
-
-        ax.bar(days, values)
-        ax.set_facecolor('xkcd:white')
-        canvas = FigureCanvasTkAgg(f, self)
-        canvas.draw()
-        canvas.get_tk_widget().grid()
 
     @staticmethod
     def calculate_values(cont):
@@ -63,26 +54,31 @@ class ContainerGraphFrame(gui.Frame):
         return values
 
 
-
 class ContainerDataFrame(gui.Frame):
     def __init__(self, master, controller):
         gui.Frame.__init__(self, master)
-        self.label = gui.Label(self, text='Container').grid()
-        self.label_location = gui.Label(self, text='Location').grid()
-        self.label_percentage = gui.Label(self, text='Container at 0%')
 
+        self.label_title = gui.Label(self, textvariable='')
 
-# OTHER FRAMES
-# Settings
-# Graphs that concern all containers
+        self.button = gui.Button(self, text='Vuilnis/Dag', command=lambda: self.check_container(controller))
+        self.button.pack()
 
-class SettingsFrame(gui.Frame):
-    def __init__(self, master, controller):
-        gui.Frame.__init__(self, master)
-        self.label = gui.Label(self, text='Settings').grid()
+    def check_container(self, controller):
+        result = controller.database()
 
+        days = ['ma', 'di', 'wo', 'do', 'vr', 'za', 'zo']
+        trash = [4, 0, 1, 0, 4, 2, 0]
 
-class GraphFrame(gui.Frame):
-    def __init__(self, master, controller):
-        gui.Frame.__init__(self, master)
-        self.label = gui.Label(self, text='Graph').grid()
+        afval_storting = {"dag": days,
+                          "Vuilniszakken": trash}
+        liters_afval = [x * 60 for x in afval_storting["Vuilniszakken"]]
+
+        df = pd.DataFrame(afval_storting)
+        df.set_index("dag", inplace=True)
+
+        plt.bar(afval_storting["dag"], liters_afval)
+        plt.xlabel("Dag")
+        plt.ylabel("Liter")
+        plt.title("Afval in Liters/Dag")
+        plt.show()
+        print(df)
