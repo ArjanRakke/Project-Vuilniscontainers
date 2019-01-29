@@ -1,3 +1,14 @@
+# Check database
+# De totale room en de gebruikte room
+# Hoeveel per dag wordt toegevoegd aan elke container
+
+import mysql.connector
+
+def database():
+    db =
+
+
+""""
 import mysql.connector
 from win10toast import ToastNotifier
 
@@ -60,7 +71,7 @@ class Container:
 #     print(x)
 
 
-""""
+
 def database():
     db = mysql.connector.connect(
         host="localhost",
