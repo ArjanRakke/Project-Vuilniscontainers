@@ -33,8 +33,8 @@ class ContainerGraphFrame(gui.Frame):
 
     @staticmethod
     def calculate_values(cont):
-        print('Totale omwonenden: {}'.format(cont.database('omwonende')))
-        omwonenden = cont.database('omwonende')
+        print('Totale omwonenden: {}'.format(cont.database_query('omwonende')))
+        omwonenden = cont.database_query('omwonende')
         values = [0, 0, 0, 0, 0, 0, 0]
         for x in omwonenden:
             x_days = x[4]
@@ -66,32 +66,47 @@ class ContainerDataFrame(gui.Frame):
     def __init__(self, master, controller):
         gui.Frame.__init__(self, master)
 
-        background_image = gui.PhotoImage(file='resources/background.gif')
-        background_label = gui.Label(self, image=background_image)
-        background_label.place(x=0, y=0, relwidth=1, relheight=1)
-        background_label.photo = background_image
-        label = gui.Label(self, text="VUILOPHAALDIENST UTRECHT", bg="#FFF", font=titleFont, fg="#056d00")
-        label.place(x=124, y=100)
+        self.background_image = gui.PhotoImage(file='resources/template.gif')
+        self.background_label = gui.Label(self, image=self.background_image)
+        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
+        self.background_label.photo = self.background_image
+        self.label = gui.Label(self, text="VUILOPHAALDIENST", bg="#FFF", font=titleFont, fg="#056d00")
+        self.label.place(x=124, y=100)
 
-        # self.button = gui.Button(self, text='Vuilnis/Dag', command=lambda: self.check_container(controller))
-        # self.button.pack()
+        # self.drop_down_default = gui.StringVar(self)
+        # self.drop_down_default.set(self.current_container[1])
+        # drop_down = gui.OptionMenu(self, self.drop_down_default, *self.all_containers, command=self.update_vars)
 
-    def check_container(self, controller):
-        result = controller.database()
+        self.button_graph = gui.Button(self, text='Vuilnis/Dag', command=lambda: controller.generate_graph('UMC'),
+                                       bg="#E16A27", fg="black", relief="flat", activebackground="#bc4505", activeforeground="white",
+                                       cursor="hand2", font=mediumFont)
+        self.button_graph.place(x=173, y=200, width=127, height=50)
 
-        days = ['ma', 'di', 'wo', 'do', 'vr', 'za', 'zo']
-        trash = [4, 0, 1, 0, 4, 2, 0]
 
-        afval_storting = {"dag": days,
-                          "Vuilniszakken": trash}
-        liters_afval = [x * 60 for x in afval_storting["Vuilniszakken"]]
+class PickContainerFrame(gui.Frame):
+    def __init__(self, master, controller):
+        gui.Frame.__init__(self, master)
 
-        df = pd.DataFrame(afval_storting)
-        df.set_index("dag", inplace=True)
+        # Background
+        self.bg_img = gui.PhotoImage(file='resources/template.gif')
+        self.bg_label = gui.Label(self, image=self.bg_img)
+        self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
+        self.bg_label.photo = self.bg_img
 
-        plt.bar(afval_storting["dag"], liters_afval)
-        plt.xlabel("Dag")
-        plt.ylabel("Liter")
-        plt.title("Afval in Liters/Dag")
-        plt.show()
-        print(df)
+        # Title
+        self.title = gui.Label(self, text="UTRECHT AFVALDIENST", font=titleFont, bg="#FFF", fg="#056d00",)
+        self.title.place(x=124, y=100)
+
+        # Dropdown
+        self.dropdown_default = gui.StringVar(self)
+        self.dropdown_default.set(controller.current_container.get())
+        self.dropdown = gui.OptionMenu(self, controller.current_container, *controller.all_containers, command=controller.next_container)
+        self.dropdown.place(x=173, y=200, width=127, height=50)
+
+        self.button_graph = gui.Button(self, text='Vuilnis/Dag', command=lambda: controller.generate_graph(controller.current_container.get()),
+                                       bg="#E16A27", fg="black", relief="flat", activebackground="#bc4505", activeforeground="white",
+                                       cursor="hand2", font=mediumFont)
+        self.button_graph.place(x=173, y=250, width=127, height=50)
+
+
+
