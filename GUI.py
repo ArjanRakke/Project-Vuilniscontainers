@@ -1,5 +1,5 @@
 import tkinter as gui
-from Frames import EmptyFrame, ContainerDataFrame, PickContainerFrame
+from Frames import EmptyFrame, PickContainerFrame
 import mysql.connector
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -28,7 +28,7 @@ class MainApplication(gui.Tk):
 
         # Each frame is defined in Frames.py, and contains a specific set of controls
         self.frames = {}
-        for F in (EmptyFrame, ContainerDataFrame, PickContainerFrame):
+        for F in (EmptyFrame, PickContainerFrame):
             self.frames[F] = F(box, self)
             self.frames[F].grid(row=0, column=0, sticky='news')
         self.show_frame(PickContainerFrame)
