@@ -14,12 +14,12 @@ class MainApplication(gui.Tk):
         gui.Tk.__init__(self, *args, **kwargs)
         # Contains all other frames
         box = gui.Frame(self)
-        box.place(width=800, height=500)
-        box.grid_rowconfigure(0)
-        box.grid_columnconfigure(0)
+        box.place(x=0, y=0, width=768, height=432)
+        box.grid_rowconfigure(0, weight=1)
+        box.grid_columnconfigure(0, weight=1)
 
-        box.config(background='#FFF')
-        current_container = gui.StringVar()
+        self.current_container = gui.StringVar()
+        self.update_vars(self)
 
         # Each frame is defined in Frames.py, and contains a specific set of controls
         self.frames = {}
@@ -49,11 +49,13 @@ class MainApplication(gui.Tk):
         cmd = db.cursor()
         cmd.execute('SELECT * FROM containers')
         result = cmd.fetchall()
+
+        print('Database: {}'.format(result))
         return result
 
-    def update_vars(self):
+    def update_vars(self, controller):
         result = self.database()
-        self.current_container.set
+        controller.current_container.set(result[0][1])
 
 
     @staticmethod
@@ -178,4 +180,8 @@ class MainApplication(gui.Tk):
 """
 
 app = MainApplication()
+# nsFietsenStalling.iconbitmap('resources/favicon.ico')
+app.geometry("768x432")
+app.title("Container Manager")
+
 app.mainloop()

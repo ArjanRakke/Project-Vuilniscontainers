@@ -5,6 +5,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import style
 style.use("ggplot")
+import datetime
+import re
+
+# Declare some fonts and variables
+titleFont = ("Arial Rounded MT Bold", 20)
+smallFont = ("console", 9)
+mediumFont = ("console", 12)
+buttonOptions = ()
 
 
 # Empty frame for testing
@@ -58,10 +66,15 @@ class ContainerDataFrame(gui.Frame):
     def __init__(self, master, controller):
         gui.Frame.__init__(self, master)
 
-        self.label_title = gui.Label(self, textvariable='')
+        background_image = gui.PhotoImage(file='resources/background.gif')
+        background_label = gui.Label(self, image=background_image)
+        background_label.place(x=0, y=0, relwidth=1, relheight=1)
+        background_label.photo = background_image
+        label = gui.Label(self, text="VUILOPHAALDIENST UTRECHT", bg="#FFF", font=titleFont, fg="#056d00")
+        label.place(x=124, y=100)
 
-        self.button = gui.Button(self, text='Vuilnis/Dag', command=lambda: self.check_container(controller))
-        self.button.pack()
+        # self.button = gui.Button(self, text='Vuilnis/Dag', command=lambda: self.check_container(controller))
+        # self.button.pack()
 
     def check_container(self, controller):
         result = controller.database()
