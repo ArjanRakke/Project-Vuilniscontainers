@@ -6,19 +6,13 @@ import matplotlib.pyplot as plt
 from matplotlib import style
 style.use("ggplot")
 
-####################################
-# REMEMBER TO REMOVE UNUSED FRAMES #
-####################################
-
-# f0ffef = groen
-# E16A27 = geel
 
 class MainApplication(gui.Tk):
     def __init__(self, *args, **kwargs):
         gui.Tk.__init__(self, *args, **kwargs)
         # Contains all other frames
         box = gui.Frame(self)
-        box.place(x=0, y=0, width=768, height=432)
+        box.place(x=0, y=0, width=450, height=320)
         box.grid_rowconfigure(0, weight=1)
         box.grid_columnconfigure(0, weight=1)
 
@@ -105,17 +99,12 @@ class MainApplication(gui.Tk):
     def next_container(self, container):
         self.current_container.set(container)
 
-    # Does nothing, used for testing
-    @staticmethod
-    def test(test):
-        # db = Database(test)
-        # print(db.execute_query())
-        print('Nothing')
-
 
 app = MainApplication()
-# app.iconbitmap('resources/favicon.ico')
-app.geometry("768x432")
+app.iconbitmap('resources/favicon.ico')
+# app.geometry("740x420")
+app.geometry("450x320")
 app.title("Container Manager")
+app.resizable(False, False)
 
 app.mainloop()
