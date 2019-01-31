@@ -48,7 +48,7 @@ class MainApplication(gui.Tk):
 
     # Get all containers by name, and put them in a list
     def get_containers(self):
-        container_data = self.database_query("SELECT `locatie` FROM `containers`")
+        container_data = self.database_query("SELECT locatie FROM containers")
         return container_data
 
     # Generate and show graph
